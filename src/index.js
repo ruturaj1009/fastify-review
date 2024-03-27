@@ -36,8 +36,8 @@ app.register(fastifyCookie,cookiesecret);
 //routes
 app.setNotFoundHandler(noRoute);
 app.register(userRoutes,{prefix:'/api/v1/user'});
-app.register(postRoutes,{prefix:'/api/v1/'});
-app.register(productRoutes,{prefix:'/api/v1/'});
+app.register(postRoutes,{prefix:'/api/v1/post'});
+app.register(productRoutes,{prefix:'/api/v1/product'});
 app.register(reviewRoutes,{prefix:'/api/v1/review'});
 
 
