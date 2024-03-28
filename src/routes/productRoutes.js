@@ -6,9 +6,9 @@ export const productRoutes = async (app)=>{
     //all products
     app.get("/getall",(req,reply)=>getallProducts(app,req,reply));
     //products by brand
-    app.get("/brandproduct/:id",(req,reply)=>getbrandProduct(app,req,reply));
+    app.get("/bid/:id",(req,reply)=>getbrandProduct(app,req,reply));
     //product by id
-    app.get("/product/:id",(req,reply)=>getsingleProduct(app,req,reply));
+    app.get("/:id",(req,reply)=>getsingleProduct(app,req,reply));
 
     //add product
     app.post("/add",{schema:addproductSchema , onRequest:[isRegistered,isAdmin(app)]},(req,reply)=>addsingleProduct(app,req,reply));
