@@ -7,7 +7,6 @@ import { config } from "dotenv";
 import { dbconn } from "./config/db.js";
 import { jwtsecret } from "./config/jwt.js";
 import { cookiesecret } from "./config/cookie.js";
-// import { isAdmin, isRegistered } from "./middleware/authMiddleware.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import { postRoutes } from "./routes/postRoutes.js";
 import { productRoutes } from "./routes/productRoutes.js";
@@ -45,7 +44,7 @@ app.get("/", async (req, reply) => {
 const start = async () => {
   try {
     await app.listen({ port: process.env.PORT });
-    console.log(`Server listening on ${process.env.MY_URL}:${process.env.PORT}`);
+    console.log(`Server listening on ${process.env.MY_URL}${process.env.PORT}`);
   } catch (err) {
     console.error('Error starting server:', err);
     process.exit(1);
