@@ -3,58 +3,53 @@ import fastifyMongo from "@fastify/mongodb";
 import cors from '@fastify/cors';
 import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
-import {config} from "dotenv";
+import { config } from "dotenv";
 import { dbconn } from "./config/db.js";
 import { jwtsecret } from "./config/jwt.js";
 import { cookiesecret } from "./config/cookie.js";
-import { isAdmin, isRegistered } from "./middleware/authMiddleware.js";
+// import { isAdmin, isRegistered } from "./middleware/authMiddleware.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import { postRoutes } from "./routes/postRoutes.js";
 import { productRoutes } from "./routes/productRoutes.js";
 import { reviewRoutes } from "./routes/reviewRoutes.js";
 import { noRoute } from "./middleware/errorMiddleware.js";
 
-
 const app = fastify();
 config();
 
-//db connection
+// Register MongoDB
 app.register(fastifyMongo, dbconn);
 
-//jwt connection
-app.register(fastifyJwt,jwtsecret);
+// Register JWT
+app.register(fastifyJwt, jwtsecret);
 
+// Middleware
+app.register(cors);
 
-//Middleware
-await app.register(cors);
-// app.decorate("authenticate",isRegistered);
+// Register Cookies
+app.register(fastifyCookie, cookiesecret);
 
-
-//cookie connection
-app.register(fastifyCookie,cookiesecret);
-
-//routes
+// Routes
 app.setNotFoundHandler(noRoute);
-app.register(userRoutes,{prefix:'/api/v1/user'});
-app.register(postRoutes,{prefix:'/api/v1/post'});
-app.register(productRoutes,{prefix:'/api/v1/product'});
-app.register(reviewRoutes,{prefix:'/api/v1/review'});
+app.register(userRoutes, { prefix: '/api/v1/user' });
+app.register(postRoutes, { prefix: '/api/v1/post' });
+app.register(productRoutes, { prefix: '/api/v1/product' });
+app.register(reviewRoutes, { prefix: '/api/v1/review' });
 
-
-app.get("/",async(req,reply)=>{
-    reply.send({
-      "message" : `Server is listening`
-    })
-})
-
-
-app.ready(async (err) => {
-  if (err) throw err;
-  console.log('No Error');
+app.get("/", async (req, reply) => {
+  reply.send({
+    "message": `Server is listening`
+  });
 });
 
+const start = async () => {
+  try {
+    await app.listen({ port: process.env.PORT });
+    console.log(`Server listening on ${process.env.MY_URL}:${process.env.PORT}`);
+  } catch (err) {
+    console.error('Error starting server:', err);
+    process.exit(1);
+  }
+};
 
-app.listen({ port: process.env.PORT }, (err) => {
-  if (err) throw err;
-  console.log(`Server listening on on ${process.env.MY_URL}${process.env.PORT}`);
-});
+start();
